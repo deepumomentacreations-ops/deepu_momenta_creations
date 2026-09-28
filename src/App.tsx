@@ -70,6 +70,10 @@ export default function App() {
   const [directScreenshotFile, setDirectScreenshotFile] = useState<File | null>(null);
   const [directMethod, setDirectMethod] = useState<'PhonePe' | 'Paytm'>('PhonePe');
 
+  // Customization Photo Upload (Optional photo attachment for hampers or frames)
+  const [customizationPhoto, setCustomizationPhoto] = useState<string | null>(null);
+  const [customizationPhotoName, setCustomizationPhotoName] = useState('');
+
   // Active Category filter state for the category showcase
   const [activeCategoryFilter, setActiveCategoryFilter] = useState('all');
 
@@ -171,6 +175,7 @@ I have placed a customized order and completed the UPI payment! Here are my orde
 • Budget: ₹${formBudget || 'Standard'}
 • Preferred Color: ${formColor || 'Not specified'}
 • Required Date: ${formDate}
+${customizationPhoto ? `• Custom Photo for Customization: [Attached image named "${customizationPhotoName}"]` : '• Custom Photo for Customization: [None]'}
 
 🎨 CUSTOMIZATION DETAILS:
 ${formDetails || 'No specifications.'}
@@ -807,6 +812,75 @@ Thank you! I am pasting this order receipt and sending the payment screenshot ri
                     onChange={(e) => setFormDate(e.target.value)}
                     className="w-full bg-white border border-[#935073]/20 rounded-xl px-4 py-3 text-sm text-[#502D55] focus:outline-none focus:ring-1 focus:ring-[#935073]"
                   />
+                </div>
+
+                {/* Optional Custom Photo Upload Choice */}
+                <div className="md:col-span-2 bg-white/45 border border-[#935073]/10 p-5 rounded-2xl">
+                  <label className="block text-xs font-bold text-[#502D55] uppercase tracking-wider mb-2">
+                    Upload Your Photo for Customization <span className="text-[10px] text-[#502D55]/60 font-normal lowercase">(optional - for gift hampers, custom frames, or references)</span>
+                  </label>
+                  
+                  {!customizationPhoto ? (
+                    <label 
+                      htmlFor="custom-form-photo-input"
+                      className="flex flex-col items-center justify-center border-2 border-dashed border-[#935073]/25 bg-white hover:bg-[#F8F4E9]/40 rounded-xl p-6 cursor-pointer transition-all text-center group"
+                    >
+                      <span className="text-2xl mb-1.5 group-hover:scale-110 transition-transform">🖼️</span>
+                      <span className="text-xs font-bold text-[#502D55]">Select or drop your photo here</span>
+                      <span className="text-[10px] text-[#502D55]/50 mt-1">Accepts PNG, JPG, or JPEG (Max 10MB)</span>
+                      <input 
+                        type="file" 
+                        id="custom-form-photo-input"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            if (file.size > 10 * 1024 * 1024) {
+                              alert("File size exceeds 10MB. Please upload a smaller photo. 💕");
+                              return;
+                            }
+                            setCustomizationPhotoName(file.name);
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                              setCustomizationPhoto(reader.result as string);
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+                  ) : (
+                    <div className="flex items-center justify-between gap-4 bg-white p-3 rounded-xl border border-emerald-500/20 shadow-sm animate-in fade-in duration-200">
+                      <div className="flex items-center gap-3">
+                        <div className="w-14 h-14 bg-gray-100 rounded-lg overflow-hidden border border-[#935073]/10 relative shadow-sm">
+                          <img 
+                            src={customizationPhoto} 
+                            alt="Customization preview" 
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                            ✓ Photo Saved in Pre-order!
+                          </p>
+                          <p className="text-[10px] text-[#502D55]/60 truncate max-w-[200px] md:max-w-xs">
+                            {customizationPhotoName}
+                          </p>
+                        </div>
+                      </div>
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          setCustomizationPhoto(null);
+                          setCustomizationPhotoName('');
+                        }}
+                        className="text-xs font-bold text-red-500 hover:text-red-700 transition-colors"
+                      >
+                        Remove Photo
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Customization Details */}
@@ -1562,7 +1636,8 @@ Please confirm my order details! Thank you.`;
                 <p><span className="opacity-60">Product:</span> <strong className="font-semibold">{formProduct}</strong></p>
                 <p><span className="opacity-60">Quantity:</span> <strong className="font-semibold">{formQuantity} pcs</strong></p>
                 <p><span className="opacity-60">Budget:</span> <strong className="font-semibold">₹{formBudget || 'Standard'}</strong></p>
-                <p className="col-span-2"><span className="opacity-60">Required Date:</span> <strong className="font-semibold">{formDate}</strong></p>
+                <p><span className="opacity-60">Custom Photo:</span> <strong className="font-semibold text-emerald-600">{customizationPhoto ? 'Yes, Attached' : 'None'}</strong></p>
+                <p><span className="opacity-60">Required Date:</span> <strong className="font-semibold">{formDate}</strong></p>
               </div>
             </div>
 
