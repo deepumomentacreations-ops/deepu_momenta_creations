@@ -1131,12 +1131,45 @@ Thank you! I am pasting this order receipt and sending the payment screenshot ri
                 </div>
 
                 {/* QR Screen terminal */}
-                <div className="relative w-40 h-44 bg-white rounded-xl border border-[#935073]/10 p-2 flex items-center justify-center overflow-hidden shadow-sm">
-                  <img 
-                    src={directMethod === 'PhonePe' ? "/images/phone_pay.png" : "/images/paytm.png"} 
-                    alt={`${directMethod} payment QR`}
-                    className="w-full h-full object-contain"
-                  />
+                <div className="relative w-44 bg-white rounded-2xl border border-[#935073]/15 p-3 flex flex-col items-center justify-center overflow-hidden shadow-md">
+                  {directMethod === 'Paytm' ? (
+                    /* Paytm Verified Greeshma Card Layout */
+                    <div className="w-full flex flex-col items-center">
+                      <div className="flex items-center gap-1 mb-2 bg-[#F8F4E9]/50 px-2 py-1 rounded-lg w-full justify-center">
+                        <span className="font-sans text-[10px] font-extrabold text-[#502D55] truncate">Allumalla Greeshma</span>
+                        {/* Verified Blue Badge */}
+                        <svg className="w-3 h-3 text-[#1C9BEF] shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                      </div>
+                      <div className="w-32 h-32 bg-white rounded-lg p-1 border border-[#935073]/5 flex items-center justify-center">
+                        <img 
+                          src="/images/paytm.png" 
+                          alt="Paytm payment QR"
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                      <p className="text-[8px] font-mono font-bold text-gray-400 mt-2">Paytm UPI Terminal</p>
+                    </div>
+                  ) : (
+                    /* PhonePe Bank Card Layout */
+                    <div className="w-full flex flex-col items-center">
+                      <div className="flex items-center gap-1 mb-2 bg-purple-50 px-2 py-1 rounded-lg w-full justify-center">
+                        <span className="font-sans text-[10px] font-extrabold text-purple-700">PhonePe UPI</span>
+                        <span className="text-[10px]">📱</span>
+                      </div>
+                      <div className="w-32 h-32 bg-white rounded-lg p-1 border border-purple-100 flex items-center justify-center relative">
+                        <img 
+                          src="/images/phone_pay.png" 
+                          alt="PhonePe payment QR"
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                      <div className="mt-2 flex items-center gap-1 bg-[#F8F4E9]/60 px-1.5 py-0.5 rounded border border-[#935073]/5 w-full justify-center">
+                        <span className="text-[8px] font-semibold text-[#502D55]/75">IOB Bank - 0345</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="mt-4 text-center w-full">
@@ -1765,16 +1798,47 @@ Please confirm my order details! Thank you.`;
             </div>
 
             {/* Selected QR Card */}
-            <div className="bg-white rounded-2xl border border-[#935073]/10 p-5 text-center flex flex-col items-center mb-6">
-              <div className="relative w-44 h-44 bg-[#F8F4E9]/30 rounded-xl border border-[#935073]/10 p-2 flex items-center justify-center overflow-hidden">
-                <img 
-                  src={paymentMethod === 'PhonePe' ? "/images/phone_pay.png" : "/images/paytm.png"} 
-                  alt={`${paymentMethod} payment QR`}
-                  className="w-full h-full object-contain"
-                />
-              </div>
+            <div className="bg-white rounded-2xl border border-[#935073]/10 p-5 text-center flex flex-col items-center mb-6 shadow-xs">
+              {paymentMethod === 'Paytm' ? (
+                /* Paytm Verified Greeshma Card Layout */
+                <div className="w-full flex flex-col items-center">
+                  <div className="flex items-center gap-1 mb-2.5 bg-[#F8F4E9]/50 px-2 py-1 rounded-lg w-full justify-center">
+                    <span className="font-sans text-[11px] font-extrabold text-[#502D55] truncate">Allumalla Greeshma</span>
+                    {/* Verified Blue Badge */}
+                    <svg className="w-3.5 h-3.5 text-[#1C9BEF] shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" stroke="currentColor" strokeWidth="2"/>
+                    </svg>
+                  </div>
+                  <div className="w-40 h-40 bg-white rounded-xl p-1.5 border border-[#935073]/10 flex items-center justify-center shadow-xs">
+                    <img 
+                      src="/images/paytm.png" 
+                      alt="Paytm payment QR"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <p className="text-[9px] font-mono font-bold text-gray-400 mt-2.5">Paytm UPI Terminal</p>
+                </div>
+              ) : (
+                /* PhonePe Bank Card Layout */
+                <div className="w-full flex flex-col items-center">
+                  <div className="flex items-center gap-1 mb-2.5 bg-purple-50 px-2.5 py-1 rounded-lg w-full justify-center">
+                    <span className="font-sans text-[11px] font-extrabold text-purple-700">PhonePe UPI</span>
+                    <span className="text-xs">📱</span>
+                  </div>
+                  <div className="w-40 h-40 bg-white rounded-xl p-1.5 border border-purple-100 flex items-center justify-center shadow-xs relative">
+                    <img 
+                      src="/images/phone_pay.png" 
+                      alt="PhonePe payment QR"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div className="mt-2.5 flex items-center gap-1 bg-[#F8F4E9]/60 px-2 py-1 rounded border border-[#935073]/5 w-full justify-center">
+                    <span className="text-[9px] font-semibold text-[#502D55]/75">IOB Bank - 0345</span>
+                  </div>
+                </div>
+              )}
 
-              <div className="mt-3 w-full">
+              <div className="mt-4 w-full">
                 <p className="text-[10px] font-semibold text-[#502D55]/50 uppercase tracking-wider">
                   {paymentMethod === 'PhonePe' ? 'UPI Phone Number' : 'Paytm UPI ID'}
                 </p>
