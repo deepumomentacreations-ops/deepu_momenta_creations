@@ -319,7 +319,7 @@ Thank you! I am pasting this order receipt and sending the payment screenshot ri
         {/* Background Overlay mesh and image */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img 
-            src="/src/assets/images/hero_background_1790604516215.jpg" 
+            src="/images/hero_background_1790604516215.jpg" 
             alt="Handcrafted creations workspace background" 
             className="w-full h-full object-cover opacity-[0.14] blur-[1px] scale-105"
             referrerPolicy="no-referrer"
@@ -404,7 +404,7 @@ Thank you! I am pasting this order receipt and sending the payment screenshot ri
             <div className="lg:col-span-5 space-y-6">
               <div className="relative rounded-2xl overflow-hidden shadow-xl aspect-square bg-[#F8F4E9] border border-[#935073]/10">
                 <img 
-                  src="/src/assets/images/pipe_cleaner_flowers_1790604545525.jpg" 
+                  src="/images/pipe_cleaner_flowers_1790604545525.jpg" 
                   alt="Custom flower craft design" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
