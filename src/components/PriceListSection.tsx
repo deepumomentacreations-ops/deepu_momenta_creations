@@ -92,16 +92,22 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
   let wrappingLabel = "None";
   if (totalFlowerCount === 1) {
     wrappingCost = 60;
-    wrappingLabel = "Single Flower Wrapping";
-  } else if (totalFlowerCount >= 2 && totalFlowerCount <= 5) {
+    wrappingLabel = "1 Flower Wrapping";
+  } else if (totalFlowerCount === 2 || totalFlowerCount === 3) {
     wrappingCost = 100;
-    wrappingLabel = "Small Bouquet Wrapping (2 to 5 flowers)";
-  } else if (totalFlowerCount > 5 && totalFlowerCount <= 8) {
+    wrappingLabel = "2 & 3 Flowers Wrapping";
+  } else if (totalFlowerCount === 4 || totalFlowerCount === 5) {
+    wrappingCost = 150;
+    wrappingLabel = "4 & 5 Flowers Wrapping";
+  } else if (totalFlowerCount === 6) {
     wrappingCost = 200;
-    wrappingLabel = "Medium Bouquet Wrapping (5 to 8 flowers)";
+    wrappingLabel = "6 Flowers Wrapping";
+  } else if (totalFlowerCount === 7 || totalFlowerCount === 8) {
+    wrappingCost = 250;
+    wrappingLabel = "7 & 8 Flowers Wrapping";
   } else if (totalFlowerCount > 8) {
     wrappingCost = 350;
-    wrappingLabel = "Large Bouquet Wrapping (8+ flowers)";
+    wrappingLabel = "More than 8 Flowers Wrapping";
   }
 
   const finalTotal = flowersCost + wrappingCost;
@@ -407,9 +413,11 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
                           💡 Wrapping auto-applied based on your rules:
                           <ul className="list-disc list-inside mt-0.5 space-y-0.5 text-[9px] text-[#502D55]/80 font-medium">
                             <li>1 flower: ₹60</li>
-                            <li>2 to 5 flowers: ₹100–150 (₹100 calculated)</li>
-                            <li>5 to 8 flowers: ₹200–250 (₹200 calculated)</li>
-                            <li>8+ flowers: ₹350</li>
+                            <li>2 & 3 flowers: ₹100</li>
+                            <li>4 & 5 flowers: ₹150</li>
+                            <li>5 & 6 flowers: ₹200 (applied to 6)</li>
+                            <li>7 & 8 flowers: ₹250</li>
+                            <li>More than 8 flowers: ₹350</li>
                           </ul>
                         </div>
                       </div>
@@ -469,46 +477,53 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
               <h4 className="font-serif text-base font-bold text-[#502D55]">Custom Bouquet Wrapping Fee Structure</h4>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {/* Tier 1 */}
               <div className="bg-[#F8F4E9]/30 rounded-xl p-4 border border-[#935073]/5">
-                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">Single Flower Option</p>
-                <p className="font-serif text-sm font-bold text-[#502D55] mb-1">Single Flower Wrapping</p>
+                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">1 Flower</p>
+                <p className="font-serif text-xs font-bold text-[#502D55] mb-1">Single Flower Wrapping</p>
                 <p className="text-xs text-[#935073] font-mono font-bold">Wrapping Cost: ₹60</p>
-                <p className="text-[10px] text-[#502D55]/50 mt-1">Single wrapped flower price</p>
+                <p className="text-[10px] text-[#502D55]/50 mt-1">1 stem wrapping price</p>
               </div>
 
               {/* Tier 2 */}
               <div className="bg-[#F8F4E9]/30 rounded-xl p-4 border border-[#935073]/5">
-                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">Small Bouquet</p>
-                <p className="font-serif text-sm font-bold text-[#502D55] mb-1">2 to 5 Flowers</p>
-                <p className="text-xs font-mono font-bold text-[#935073]">Wrapping Cost: ₹100 – ₹150</p>
-                <p className="text-[10px] text-[#502D55]/50 mt-1">Standard protective wraps</p>
+                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">2 & 3 Flowers</p>
+                <p className="font-serif text-xs font-bold text-[#502D55] mb-1">Small Bouquet Wrapping</p>
+                <p className="text-xs font-mono font-bold text-[#935073]">Wrapping Cost: ₹100</p>
+                <p className="text-[10px] text-[#502D55]/50 mt-1">2 to 3 stems wrapping</p>
               </div>
 
               {/* Tier 3 */}
               <div className="bg-[#F8F4E9]/30 rounded-xl p-4 border border-[#935073]/5">
-                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">Medium Bouquet</p>
-                <p className="font-serif text-sm font-bold text-[#502D55] mb-1">5 to 8 Flowers</p>
-                <p className="text-xs font-mono font-bold text-[#935073]">Wrapping Cost: ₹200 – ₹250</p>
-                <p className="text-[10px] text-[#502D55]/50 mt-1">Premium mesh or pastel wraps</p>
+                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">4 & 5 Flowers</p>
+                <p className="font-serif text-xs font-bold text-[#502D55] mb-1">Medium Bouquet Wrapping</p>
+                <p className="text-xs font-mono font-bold text-[#935073]">Wrapping Cost: ₹150</p>
+                <p className="text-[10px] text-[#502D55]/50 mt-1">4 to 5 stems wrapping</p>
               </div>
 
               {/* Tier 4 */}
               <div className="bg-[#F8F4E9]/30 rounded-xl p-4 border border-[#935073]/5">
-                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">Large Bouquet</p>
-                <p className="font-serif text-sm font-bold text-[#502D55] mb-1">More than 8 Flowers</p>
-                <p className="text-xs font-mono font-bold text-[#935073]">Wrapping Cost: ₹350</p>
-                <p className="text-[10px] text-[#502D55]/50 mt-1">Deluxe oversized wraps</p>
+                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">5 & 6 Flowers</p>
+                <p className="font-serif text-xs font-bold text-[#502D55] mb-1">Standard Bouquet Wrapping</p>
+                <p className="text-xs font-mono font-bold text-[#935073]">Wrapping Cost: ₹200</p>
+                <p className="text-[10px] text-[#502D55]/50 mt-1">5 to 6 stems wrapping</p>
               </div>
 
-              {/* Tier 5 / Premium */}
+              {/* Tier 5 */}
+              <div className="bg-[#F8F4E9]/30 rounded-xl p-4 border border-[#935073]/5">
+                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">7 & 8 Flowers</p>
+                <p className="font-serif text-xs font-bold text-[#502D55] mb-1">Large Bouquet Wrapping</p>
+                <p className="text-xs font-mono font-bold text-[#935073]">Wrapping Cost: ₹250</p>
+                <p className="text-[10px] text-[#502D55]/50 mt-1">7 to 8 stems wrapping</p>
+              </div>
+
+              {/* Tier 6 */}
               <div className="bg-[#935073]/5 rounded-xl p-4 border border-[#935073]/20 relative overflow-hidden group hover:shadow-md transition-all">
-                <span className="absolute top-1 right-2 text-xs">👑</span>
-                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">Ultra Luxury</p>
-                <p className="font-serif text-sm font-bold text-[#502D55] mb-1">Premium Bouquet</p>
-                <p className="text-xs font-mono font-bold text-[#935073]">Starts at: ₹999+</p>
-                <p className="text-[10px] text-[#502D55]/50 mt-1">Deluxe fully customized setup</p>
+                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">More than 8 Flowers</p>
+                <p className="font-serif text-xs font-bold text-[#502D55] mb-1">Deluxe Bouquet wrapping</p>
+                <p className="text-xs font-mono font-bold text-[#935073]">Wrapping Cost: ₹350</p>
+                <p className="text-[10px] text-[#502D55]/50 mt-1">Deluxe oversized wrapping</p>
               </div>
             </div>
           </div>

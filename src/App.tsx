@@ -12,7 +12,11 @@ import {
   ChevronDown, 
   ArrowRight,
   MessageCircle,
-  ExternalLink
+  ExternalLink,
+  ShoppingCart,
+  Plus,
+  Minus,
+  Trash2
 } from 'lucide-react';
 
 import { 
@@ -33,6 +37,73 @@ export default function App() {
   
   // Header Shadow state on Scroll
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // --- Persistent Shopping Cart Feature (Multi-Item Cart System) ---
+  interface CartItem {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    originalPriceString: string;
+  }
+
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // Parse price string safely
+  const parseNumericPrice = (priceStr: string): number => {
+    const cleanStr = priceStr.replace(/₹|,/g, '');
+    const match = cleanStr.match(/\d+/);
+    return match ? parseInt(match[0], 10) : 0;
+  };
+
+  // Add item to persistent pre-order cart
+  const addToCart = (product: { name: string; price: string }) => {
+    const numericPrice = parseNumericPrice(product.price);
+    
+    setCart(prev => {
+      const existingIndex = prev.findIndex(item => item.name === product.name);
+      if (existingIndex > -1) {
+        const copy = [...prev];
+        copy[existingIndex].quantity += 1;
+        return copy;
+      } else {
+        return [
+          ...prev,
+          {
+            id: Math.random().toString(36).substring(2, 9),
+            name: product.name,
+            price: numericPrice,
+            quantity: 1,
+            originalPriceString: product.price
+          }
+        ];
+      }
+    });
+
+    setIsCartOpen(true);
+  };
+
+  const updateCartQty = (id: string, delta: number) => {
+    setCart(prev => prev.map(item => {
+      if (item.id === id) {
+        const nextQty = item.quantity + delta;
+        return { ...item, quantity: Math.max(1, nextQty) };
+      }
+      return item;
+    }));
+  };
+
+  const removeFromCart = (id: string) => {
+    setCart(prev => prev.filter(item => item.id !== id));
+  };
+
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  const cartTotalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const totalCartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   // Pre-Order Modal states
   const [isInstagramModalOpen, setIsInstagramModalOpen] = useState(false);
@@ -99,27 +170,41 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Handle CTA clicking -> launches Instagram Modal
+  // Handle CTA clicking -> adds item directly to the pre-order cart
   const handleOrderClick = (product?: { name: string; price: string; category?: string }) => {
     if (product) {
-      setSelectedProduct(product);
+      addToCart(product);
     } else {
-      setSelectedProduct(null);
+      // Direct custom request scroll
+      const orderSection = document.getElementById('custom-order');
+      if (orderSection) {
+        orderSection.scrollIntoView({ behavior: 'smooth' });
+      }
     }
-    setIsInstagramModalOpen(true);
   };
 
   // Callback when user clicks "I've Followed - Continue to Order" inside Instagram Modal
   const handleInstagramConfirmed = () => {
     setIsInstagramModalOpen(false);
     
-    // Auto fill custom order form if a specific product was chosen
-    if (selectedProduct) {
+    if (cart.length > 0) {
+      // Auto-fill form from Cart items!
+      setFormProduct("Custom Multi-Item Order");
+      
+      const cartSummary = cart.map(item => `• ${item.quantity}x ${item.name} (${item.originalPriceString})`).join('\n');
+      setFormDetails(`I am interested in ordering the following items from my shopping cart:\n\n${cartSummary}\n\nTotal Estimated Amount: ₹${cartTotalAmount}\n\nThank you!`);
+      setFormBudget(cartTotalAmount.toString());
+      setFormQuantity(totalCartItemCount.toString());
+    } else if (selectedProduct) {
       setFormProduct(selectedProduct.name);
       setFormDetails(`I am interested in ordering: "${selectedProduct.name}" priced at ${selectedProduct.price}.`);
+      setFormBudget(parseNumericPrice(selectedProduct.price).toString());
+      setFormQuantity('1');
     } else {
       setFormProduct('Pipe-Cleaner Flowers');
       setFormDetails('');
+      setFormBudget('');
+      setFormQuantity('1');
     }
 
     // Smooth scroll to Custom Order Form section
@@ -243,12 +328,26 @@ Thank you! I am pasting this order receipt and sending the payment screenshot ri
           </nav>
 
           {/* Zone 3: Primary Action buttons */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
+            {/* Desktop & Mobile Header Cart Button */}
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2 text-[#502D55] hover:text-[#935073] hover:bg-[#502D55]/5 rounded-xl transition-all flex items-center justify-center cursor-pointer"
+              title="View Pre-order Cart"
+            >
+              <ShoppingCart size={20} />
+              {totalCartItemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white font-mono font-bold text-[8px] w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-xs">
+                  {totalCartItemCount}
+                </span>
+              )}
+            </button>
+
             <button
               onClick={() => handleOrderClick()}
-              className="px-4 py-2 text-xs font-bold bg-[#502D55] text-white rounded-xl hover:bg-[#935073] transition-colors duration-200 shadow-md whitespace-nowrap shrink-0"
+              className="hidden md:block px-4 py-2 text-xs font-bold bg-[#502D55] text-white rounded-xl hover:bg-[#935073] transition-colors duration-200 shadow-md whitespace-nowrap shrink-0 cursor-pointer"
             >
-              Order Now
+              Custom Order
             </button>
           </div>
 
@@ -1787,6 +1886,176 @@ Please confirm my order details! Thank you.`;
         onConfirm={handleInstagramConfirmed}
         productDetails={selectedProduct}
       />
+
+
+      {/* ----------------- FLOATING CART BUTTON ----------------- */}
+      {totalCartItemCount > 0 && (
+        <button
+          onClick={() => setIsCartOpen(true)}
+          className="fixed bottom-6 right-6 z-40 bg-[#502D55] text-white hover:bg-[#935073] p-4 rounded-full shadow-2xl transition-all duration-300 flex items-center gap-2 hover:scale-105 active:scale-95 group cursor-pointer border border-[#F6DBC0]/20"
+        >
+          <div className="relative">
+            <ShoppingCart size={20} />
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white font-mono font-bold text-[9px] w-5 h-5 rounded-full flex items-center justify-center animate-bounce shadow-sm">
+              {totalCartItemCount}
+            </span>
+          </div>
+          <span className="text-xs font-bold font-serif hidden md:inline">View Pre-order Cart</span>
+        </button>
+      )}
+
+
+      {/* ----------------- SHOPPING CART SLIDE-OUT DRAWER ----------------- */}
+      {isCartOpen && (
+        <div className="fixed inset-0 z-50 overflow-hidden" role="dialog" aria-modal="true">
+          {/* Backdrop overlay with blur */}
+          <div 
+            onClick={() => setIsCartOpen(false)}
+            className="absolute inset-0 bg-[#502D55]/50 backdrop-blur-xs transition-opacity duration-300"
+          />
+
+          <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            {/* Drawer container with slide animation */}
+            <div className="w-screen max-w-md bg-[#F8F4E9] shadow-2xl flex flex-col h-full border-l border-[#935073]/10 transform transition-transform duration-300 translate-x-0">
+              
+              {/* Header */}
+              <div className="px-6 py-5 bg-white border-b border-[#935073]/15 flex items-center justify-between shadow-xs shrink-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">🎀</span>
+                  <h2 className="font-serif text-lg font-extrabold text-[#502D55]">Your Pre-Order Cart</h2>
+                </div>
+                <button
+                  onClick={() => setIsCartOpen(false)}
+                  className="p-1.5 rounded-full hover:bg-[#502D55]/5 text-[#502D55] transition-colors cursor-pointer"
+                  aria-label="Close Cart"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Cart Items List */}
+              <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
+                {cart.length > 0 ? (
+                  cart.map((item) => (
+                    <div 
+                      key={item.id}
+                      className="bg-white rounded-2xl p-4 border border-[#935073]/10 flex gap-4 hover:shadow-xs transition-shadow relative overflow-hidden"
+                    >
+                      {/* Left: Thumbnail Icon based on item name */}
+                      <div className="w-12 h-12 rounded-xl bg-[#F8F4E9]/50 border border-[#935073]/5 flex items-center justify-center shrink-0 overflow-hidden relative">
+                        <span className="text-xl">
+                          {item.name.toLowerCase().includes('bouquet') || item.name.toLowerCase().includes('bespoke') ? '💐' :
+                           item.name.toLowerCase().includes('keychain') ? '🔑' :
+                           item.name.toLowerCase().includes('hamper') ? '🎁' :
+                           item.name.toLowerCase().includes('bag') ? '👜' :
+                           item.name.toLowerCase().includes('earring') ? '✨' : '🌸'}
+                        </span>
+                      </div>
+
+                      {/* Middle: Details */}
+                      <div className="flex-1 min-w-0 text-left">
+                        <h4 className="font-serif text-sm font-bold text-[#502D55] truncate leading-tight pr-4">
+                          {item.name}
+                        </h4>
+                        <p className="text-xs text-[#935073]/80 font-semibold mt-1">
+                          Rate: {item.originalPriceString}
+                        </p>
+
+                        {/* Quantity controls */}
+                        <div className="flex items-center gap-2 mt-3">
+                          <div className="flex items-center gap-1 bg-[#502D55]/5 p-0.5 rounded-lg border border-[#935073]/5">
+                            <button
+                              onClick={() => updateCartQty(item.id, -1)}
+                              className="w-5 h-5 bg-white text-[#502D55] hover:bg-gray-100 rounded flex items-center justify-center shadow-xs transition-colors cursor-pointer text-xs font-bold"
+                            >
+                              <Minus size={10} strokeWidth={2.5} />
+                            </button>
+                            <span className="text-xs font-mono font-bold text-[#502D55] min-w-[16px] text-center">
+                              {item.quantity}
+                            </span>
+                            <button
+                              onClick={() => updateCartQty(item.id, 1)}
+                              className="w-5 h-5 bg-[#502D55] text-white hover:bg-[#935073] rounded flex items-center justify-center shadow-xs transition-colors cursor-pointer text-xs font-bold"
+                            >
+                              <Plus size={10} strokeWidth={2.5} />
+                            </button>
+                          </div>
+
+                          <button
+                            onClick={() => removeFromCart(item.id)}
+                            className="p-1 text-red-500 hover:text-red-700 rounded transition-colors cursor-pointer"
+                            title="Remove item"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Right: Price Subtotal */}
+                      <div className="text-right shrink-0 flex flex-col justify-between items-end">
+                        <span className="font-mono text-sm font-extrabold text-[#502D55]">
+                          ₹{item.price * item.quantity}
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="h-full flex flex-col items-center justify-center text-center py-20 px-4">
+                    <span className="text-5xl mb-3 opacity-65">🛍️</span>
+                    <h3 className="font-serif text-base font-bold text-[#502D55]">Your pre-order cart is empty</h3>
+                    <p className="text-xs text-[#502D55]/60 mt-1.5 max-w-xs leading-relaxed">
+                      Add custom pipe cleaner flowers, bespoke keychains, or custom gift hampers to your cart to customize your dream order.
+                    </p>
+                    <button
+                      onClick={() => setIsCartOpen(false)}
+                      className="mt-6 px-5 py-2.5 bg-[#502D55] text-white hover:bg-[#935073] rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer"
+                    >
+                      Keep Browsing Crafts
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer */}
+              {cart.length > 0 && (
+                <div className="px-6 py-6 bg-white border-t border-[#935073]/15 shadow-md shrink-0">
+                  <div className="flex justify-between items-baseline mb-4">
+                    <span className="text-xs font-bold text-[#502D55] uppercase tracking-wide">Total Estimated Cost:</span>
+                    <span className="text-2xl font-mono font-extrabold text-[#935073]">
+                      ₹{cartTotalAmount}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    <button
+                      onClick={() => {
+                        // Triggers the Instagram verification first, then fills the pre-order form
+                        setIsCartOpen(false);
+                        setIsInstagramModalOpen(true);
+                      }}
+                      className="w-full py-3 bg-gradient-to-r from-[#502D55] to-[#935073] text-white font-bold rounded-xl text-xs hover:scale-[1.01] transition-transform shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <ShoppingBag size={14} />
+                      Proceed to Pre-Order Details
+                    </button>
+
+                    <button
+                      onClick={() => setIsCartOpen(false)}
+                      className="w-full py-2 bg-[#502D55]/5 text-[#502D55] hover:bg-[#502D55]/10 font-bold rounded-xl text-xs transition-colors cursor-pointer"
+                    >
+                      Add More Beautiful Items
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-center text-[#502D55]/40 mt-3 italic">
+                    🌸 Pre-ordering is free! Secure your queue slot before checking out with Greeshma.
+                  </p>
+                </div>
+              )}
+
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
