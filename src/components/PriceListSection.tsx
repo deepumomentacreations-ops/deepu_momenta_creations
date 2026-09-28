@@ -101,13 +101,22 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
     wrappingLabel = "4 & 5 Flowers Wrapping";
   } else if (totalFlowerCount === 6) {
     wrappingCost = 200;
-    wrappingLabel = "6 Flowers Wrapping";
+    wrappingLabel = "5 & 6 Flowers Wrapping";
   } else if (totalFlowerCount === 7 || totalFlowerCount === 8) {
     wrappingCost = 250;
     wrappingLabel = "7 & 8 Flowers Wrapping";
-  } else if (totalFlowerCount > 8) {
+  } else if (totalFlowerCount === 9 || totalFlowerCount === 10) {
     wrappingCost = 350;
-    wrappingLabel = "More than 8 Flowers Wrapping";
+    wrappingLabel = "9 & 10 Flowers Wrapping";
+  } else if (totalFlowerCount === 11 || totalFlowerCount === 12) {
+    wrappingCost = 400;
+    wrappingLabel = "11 & 12 Flowers Wrapping";
+  } else if (totalFlowerCount === 13 || totalFlowerCount === 14) {
+    wrappingCost = 450;
+    wrappingLabel = "13 & 14 Flowers Wrapping";
+  } else if (totalFlowerCount >= 15) {
+    wrappingCost = 500;
+    wrappingLabel = "More than 15 Flowers Wrapping";
   }
 
   const finalTotal = flowersCost + wrappingCost;
@@ -417,7 +426,10 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
                             <li>4 & 5 flowers: ₹150</li>
                             <li>5 & 6 flowers: ₹200 (applied to 6)</li>
                             <li>7 & 8 flowers: ₹250</li>
-                            <li>More than 8 flowers: ₹350</li>
+                            <li>9 & 10 flowers: ₹350</li>
+                            <li>11 & 12 flowers: ₹400</li>
+                            <li>13 & 14 flowers: ₹450</li>
+                            <li>More than 15 flowers: ₹500</li>
                           </ul>
                         </div>
                       </div>
@@ -477,53 +489,87 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
               <h4 className="font-serif text-base font-bold text-[#502D55]">Custom Bouquet Wrapping Fee Structure</h4>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-3">
               {/* Tier 1 */}
-              <div className="bg-[#F8F4E9]/30 rounded-xl p-4 border border-[#935073]/5">
-                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">1 Flower</p>
-                <p className="font-serif text-xs font-bold text-[#502D55] mb-1">Single Flower Wrapping</p>
-                <p className="text-xs text-[#935073] font-mono font-bold">Wrapping Cost: ₹60</p>
-                <p className="text-[10px] text-[#502D55]/50 mt-1">1 stem wrapping price</p>
+              <div className="bg-[#F8F4E9]/30 rounded-xl p-3 border border-[#935073]/5 flex flex-col justify-between">
+                <div>
+                  <p className="text-[9px] font-bold text-[#935073] uppercase tracking-wider mb-1">1 Flower</p>
+                  <p className="font-serif text-[11px] font-bold text-[#502D55] leading-tight mb-1">Single Flower</p>
+                </div>
+                <p className="text-xs text-[#935073] font-mono font-bold mt-2">₹60</p>
               </div>
 
               {/* Tier 2 */}
-              <div className="bg-[#F8F4E9]/30 rounded-xl p-4 border border-[#935073]/5">
-                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">2 & 3 Flowers</p>
-                <p className="font-serif text-xs font-bold text-[#502D55] mb-1">Small Bouquet Wrapping</p>
-                <p className="text-xs font-mono font-bold text-[#935073]">Wrapping Cost: ₹100</p>
-                <p className="text-[10px] text-[#502D55]/50 mt-1">2 to 3 stems wrapping</p>
+              <div className="bg-[#F8F4E9]/30 rounded-xl p-3 border border-[#935073]/5 flex flex-col justify-between">
+                <div>
+                  <p className="text-[9px] font-bold text-[#935073] uppercase tracking-wider mb-1">2 & 3 Flowers</p>
+                  <p className="font-serif text-[11px] font-bold text-[#502D55] leading-tight mb-1">Small Bouquet</p>
+                </div>
+                <p className="text-xs text-[#935073] font-mono font-bold mt-2">₹100</p>
               </div>
 
               {/* Tier 3 */}
-              <div className="bg-[#F8F4E9]/30 rounded-xl p-4 border border-[#935073]/5">
-                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">4 & 5 Flowers</p>
-                <p className="font-serif text-xs font-bold text-[#502D55] mb-1">Medium Bouquet Wrapping</p>
-                <p className="text-xs font-mono font-bold text-[#935073]">Wrapping Cost: ₹150</p>
-                <p className="text-[10px] text-[#502D55]/50 mt-1">4 to 5 stems wrapping</p>
+              <div className="bg-[#F8F4E9]/30 rounded-xl p-3 border border-[#935073]/5 flex flex-col justify-between">
+                <div>
+                  <p className="text-[9px] font-bold text-[#935073] uppercase tracking-wider mb-1">4 & 5 Flowers</p>
+                  <p className="font-serif text-[11px] font-bold text-[#502D55] leading-tight mb-1">Medium Bouquet</p>
+                </div>
+                <p className="text-xs text-[#935073] font-mono font-bold mt-2">₹150</p>
               </div>
 
               {/* Tier 4 */}
-              <div className="bg-[#F8F4E9]/30 rounded-xl p-4 border border-[#935073]/5">
-                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">5 & 6 Flowers</p>
-                <p className="font-serif text-xs font-bold text-[#502D55] mb-1">Standard Bouquet Wrapping</p>
-                <p className="text-xs font-mono font-bold text-[#935073]">Wrapping Cost: ₹200</p>
-                <p className="text-[10px] text-[#502D55]/50 mt-1">5 to 6 stems wrapping</p>
+              <div className="bg-[#F8F4E9]/30 rounded-xl p-3 border border-[#935073]/5 flex flex-col justify-between">
+                <div>
+                  <p className="text-[9px] font-bold text-[#935073] uppercase tracking-wider mb-1">5 & 6 Flowers</p>
+                  <p className="font-serif text-[11px] font-bold text-[#502D55] leading-tight mb-1">Standard Bouquet</p>
+                </div>
+                <p className="text-xs text-[#935073] font-mono font-bold mt-2">₹200</p>
               </div>
 
               {/* Tier 5 */}
-              <div className="bg-[#F8F4E9]/30 rounded-xl p-4 border border-[#935073]/5">
-                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">7 & 8 Flowers</p>
-                <p className="font-serif text-xs font-bold text-[#502D55] mb-1">Large Bouquet Wrapping</p>
-                <p className="text-xs font-mono font-bold text-[#935073]">Wrapping Cost: ₹250</p>
-                <p className="text-[10px] text-[#502D55]/50 mt-1">7 to 8 stems wrapping</p>
+              <div className="bg-[#F8F4E9]/30 rounded-xl p-3 border border-[#935073]/5 flex flex-col justify-between">
+                <div>
+                  <p className="text-[9px] font-bold text-[#935073] uppercase tracking-wider mb-1">7 & 8 Flowers</p>
+                  <p className="font-serif text-[11px] font-bold text-[#502D55] leading-tight mb-1">Large Bouquet</p>
+                </div>
+                <p className="text-xs text-[#935073] font-mono font-bold mt-2">₹250</p>
               </div>
 
               {/* Tier 6 */}
-              <div className="bg-[#935073]/5 rounded-xl p-4 border border-[#935073]/20 relative overflow-hidden group hover:shadow-md transition-all">
-                <p className="text-[10px] font-bold text-[#935073] uppercase tracking-wider mb-1">More than 8 Flowers</p>
-                <p className="font-serif text-xs font-bold text-[#502D55] mb-1">Deluxe Bouquet wrapping</p>
-                <p className="text-xs font-mono font-bold text-[#935073]">Wrapping Cost: ₹350</p>
-                <p className="text-[10px] text-[#502D55]/50 mt-1">Deluxe oversized wrapping</p>
+              <div className="bg-[#F8F4E9]/30 rounded-xl p-3 border border-[#935073]/5 flex flex-col justify-between">
+                <div>
+                  <p className="text-[9px] font-bold text-[#935073] uppercase tracking-wider mb-1">9 & 10 Flowers</p>
+                  <p className="font-serif text-[11px] font-bold text-[#502D55] leading-tight mb-1">Extra Large</p>
+                </div>
+                <p className="text-xs text-[#935073] font-mono font-bold mt-2">₹350</p>
+              </div>
+
+              {/* Tier 7 */}
+              <div className="bg-[#F8F4E9]/30 rounded-xl p-3 border border-[#935073]/5 flex flex-col justify-between">
+                <div>
+                  <p className="text-[9px] font-bold text-[#935073] uppercase tracking-wider mb-1">11 & 12 Flowers</p>
+                  <p className="font-serif text-[11px] font-bold text-[#502D55] leading-tight mb-1">Deluxe Bouquet</p>
+                </div>
+                <p className="text-xs text-[#935073] font-mono font-bold mt-2">₹400</p>
+              </div>
+
+              {/* Tier 8 */}
+              <div className="bg-[#F8F4E9]/30 rounded-xl p-3 border border-[#935073]/5 flex flex-col justify-between">
+                <div>
+                  <p className="text-[9px] font-bold text-[#935073] uppercase tracking-wider mb-1">13 & 14 Flowers</p>
+                  <p className="font-serif text-[11px] font-bold text-[#502D55] leading-tight mb-1">Super Deluxe</p>
+                </div>
+                <p className="text-xs text-[#935073] font-mono font-bold mt-2">₹450</p>
+              </div>
+
+              {/* Tier 9 */}
+              <div className="bg-[#935073]/5 rounded-xl p-3 border border-[#935073]/20 relative overflow-hidden group hover:shadow-md transition-all flex flex-col justify-between">
+                <span className="absolute top-1 right-1 text-[8px]">👑</span>
+                <div>
+                  <p className="text-[9px] font-bold text-[#935073] uppercase tracking-wider mb-1">15+ Flowers</p>
+                  <p className="font-serif text-[11px] font-bold text-[#502D55] leading-tight mb-1">Grand Masterpiece</p>
+                </div>
+                <p className="text-xs text-[#935073] font-mono font-bold mt-2">₹500</p>
               </div>
             </div>
           </div>
