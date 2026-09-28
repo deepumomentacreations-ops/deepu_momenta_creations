@@ -4,19 +4,61 @@ import {
   pipeCleanerFlowerPrices, 
   pipeCleanerKeychainPrices, 
   crochetKeychainPrices,
+  singleFlowerPotPrices,
+  doubleFlowerPotPrices,
   PriceListItem
 } from '../data/businessData';
 
 interface PriceListSectionProps {
   onOrderClick: (item: { name: string; price: string }) => void;
-  activeTab: 'flowers' | 'pipe_keychains' | 'crochet_keychains';
-  setActiveTab: (tab: 'flowers' | 'pipe_keychains' | 'crochet_keychains') => void;
+  activeTab: 'flowers' | 'pipe_keychains' | 'crochet_keychains' | 'flower_pots';
+  setActiveTab: (tab: 'flowers' | 'pipe_keychains' | 'crochet_keychains' | 'flower_pots') => void;
 }
 
-type TabType = 'flowers' | 'pipe_keychains' | 'crochet_keychains';
+type TabType = 'flowers' | 'pipe_keychains' | 'crochet_keychains' | 'flower_pots';
 
 const getItemImage = (name: string, tab: TabType): string => {
   const norm = name.toLowerCase();
+  
+  if (tab === 'pipe_keychains' || tab === 'crochet_keychains') {
+    if (norm.includes('bear')) return "/images/bear.jpg";
+    if (norm.includes('blue lily')) return "/images/lily.jpg";
+    if (norm.includes('pink lily')) return "/images/lily.jpg";
+    if (norm.includes('lily')) return "/images/lily.jpg";
+    if (norm.includes('bow')) return "/images/bow.jpg";
+    if (norm.includes('bunny')) return "/images/bunny.jpg";
+    if (norm.includes('butterfly')) return "/images/butterfly.jpg";
+    if (norm.includes('cherry')) return "/images/cherry.jpg";
+    if (norm.includes('cloud')) return "/images/cloud.jpg";
+    if (norm.includes('daisy')) return "/images/daisy.jpg";
+    if (norm.includes('evil eye')) return "/images/evil_eye.jpg";
+    if (norm.includes('heart chain')) return "/images/heart_chain.jpg";
+    if (norm.includes('heart')) return "/images/heart.jpg";
+    if (norm.includes('lavender')) return "/images/lavender_bunch.jpg";
+    if (norm.includes('lettering')) return "/images/lettering.jpg";
+    if (norm.includes('octopus')) return "/images/octopus.jpg";
+    if (norm.includes('panda')) return "/images/panda.jpg";
+    if (norm.includes('rainbow')) return "/images/rainbow.jpg";
+    if (norm.includes('rose')) return "/images/rose.jpg";
+    if (norm.includes('smiley')) return "/images/smiley.jpg";
+    if (norm.includes('star')) return "/images/star.jpg";
+    if (norm.includes('strawberry')) return "/images/strawberry.jpg";
+    if (norm.includes('sunflower')) return "/images/sunflower.jpg";
+    if (norm.includes('tulip bunch')) return "/images/flower_bouquets_1790604561485.jpg";
+    if (norm.includes('tulip')) return "/images/tulip.jpg";
+    
+    return "/images/handmade_keychains_1790604595375.jpg";
+  }
+
+  if (tab === 'flower_pots') {
+    if (norm.includes('daisy')) return "/images/daisy_pot.jpg";
+    if (norm.includes('sunflower')) return "/images/sunflower_pot.jpg";
+    if (norm.includes('tulip')) return "/images/tulip_pot.jpg";
+    if (norm.includes('lavender')) return "/images/lavender_pot.jpg";
+    if (norm.includes('rose')) return "/images/rose_pot.jpg";
+    if (norm.includes('lily')) return "/images/lily_pot.jpg";
+    return "/images/flower_pots.jpg";
+  }
   
   if (tab === 'flowers') {
     if (norm.includes('daisy')) {
@@ -44,14 +86,6 @@ const getItemImage = (name: string, tab: TabType): string => {
       return "/images/flower_bouquets_1790604561485.jpg";
     }
     return "/images/pipe_cleaner_flowers_1790604545525.jpg";
-  }
-  
-  if (tab === 'pipe_keychains') {
-    return "/images/handmade_keychains_1790604595375.jpg";
-  }
-
-  if (tab === 'crochet_keychains') {
-    return "/images/handmade_keychains_1790604595375.jpg";
   }
   
   return "/images/pipe_cleaner_flowers_1790604545525.jpg";
@@ -130,6 +164,8 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
         return pipeCleanerKeychainPrices;
       case 'crochet_keychains':
         return crochetKeychainPrices;
+      case 'flower_pots':
+        return [...singleFlowerPotPrices, ...doubleFlowerPotPrices];
       default:
         return [];
     }
@@ -143,6 +179,8 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
         return 'Pipe-Cleaner Keychain Price List';
       case 'crochet_keychains':
         return 'Crochet Keychain Price List';
+      case 'flower_pots':
+        return 'Handcrafted Flower Pot Price List';
     }
   };
 
@@ -176,10 +214,10 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
         </div>
 
         {/* Tab Selection Segments (Interactive Filter Controls, styling according to Zero-Pill rules) */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8 max-w-lg mx-auto p-1.5 bg-[#502D55]/5 rounded-xl border border-[#935073]/5">
+        <div className="flex flex-wrap justify-center gap-2 mb-8 max-w-2xl mx-auto p-1.5 bg-[#502D55]/5 rounded-xl border border-[#935073]/5">
           <button
             onClick={() => { setActiveTab('flowers'); setSearchQuery(''); }}
-            className={`flex-1 min-w-[120px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 ${
+            className={`flex-1 min-w-[110px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 ${
               activeTab === 'flowers'
                 ? 'bg-[#502D55] text-white shadow-sm'
                 : 'text-[#502D55]/80 hover:bg-[#502D55]/5 hover:text-[#502D55]'
@@ -188,8 +226,18 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
             🌸 Flowers
           </button>
           <button
+            onClick={() => { setActiveTab('flower_pots'); setSearchQuery(''); }}
+            className={`flex-1 min-w-[110px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 ${
+              activeTab === 'flower_pots'
+                ? 'bg-[#502D55] text-white shadow-sm'
+                : 'text-[#502D55]/80 hover:bg-[#502D55]/5 hover:text-[#502D55]'
+            }`}
+          >
+            🪴 Flower Pots
+          </button>
+          <button
             onClick={() => { setActiveTab('pipe_keychains'); setSearchQuery(''); }}
-            className={`flex-1 min-w-[120px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 ${
+            className={`flex-1 min-w-[110px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 ${
               activeTab === 'pipe_keychains'
                 ? 'bg-[#502D55] text-white shadow-sm'
                 : 'text-[#502D55]/80 hover:bg-[#502D55]/5 hover:text-[#502D55]'
@@ -199,7 +247,7 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
           </button>
           <button
             onClick={() => { setActiveTab('crochet_keychains'); setSearchQuery(''); }}
-            className={`flex-1 min-w-[120px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 ${
+            className={`flex-1 min-w-[110px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 ${
               activeTab === 'crochet_keychains'
                 ? 'bg-[#502D55] text-white shadow-sm'
                 : 'text-[#502D55]/80 hover:bg-[#502D55]/5 hover:text-[#502D55]'

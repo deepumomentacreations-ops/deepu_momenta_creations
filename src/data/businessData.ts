@@ -105,6 +105,13 @@ export const productCategories: ProductCategory[] = [
     description: "Exquisite personalized embroidery detailing on handkerchiefs, shirts, kurtis, and special fabrics.",
     startingPrice: "₹400",
     imageUrl: "/images/custom_embroidery_1790606433845.jpg"
+  },
+  {
+    id: "flower-pots",
+    name: "Handcrafted Flower Pots",
+    description: "Charming mini single and double flower pots featuring customized designs of daisies, sunflowers, tulips, roses, and lavender bunches.",
+    startingPrice: "₹150",
+    imageUrl: "/images/flower_pots.jpg"
   }
 ];
 
@@ -168,6 +175,24 @@ export const crochetKeychainPrices: PriceListItem[] = [
   { name: "Heart", price: "₹90", numericPrice: 90 },
   { name: "Bow – Double Colour", price: "₹100", numericPrice: 100 },
   { name: "Rose", price: "₹120", numericPrice: 120 },
+];
+
+export const singleFlowerPotPrices: PriceListItem[] = [
+  { name: "Single Daisy flower pot", price: "₹150", numericPrice: 150 },
+  { name: "Single Sunflower pot", price: "₹200", numericPrice: 200 },
+  { name: "Single Tulip flower pot", price: "₹180", numericPrice: 180 },
+  { name: "Single Lavender bunch flower pot", price: "₹160", numericPrice: 160 },
+  { name: "Single Rose flower pot", price: "₹190", numericPrice: 190 },
+  { name: "Single Lily flower pot", price: "₹200", numericPrice: 200 },
+];
+
+export const doubleFlowerPotPrices: PriceListItem[] = [
+  { name: "Double Daisy flower pot", price: "₹190", numericPrice: 190 },
+  { name: "Double Sunflower pot", price: "₹290", numericPrice: 290 },
+  { name: "Double Tulip flower pot", price: "₹250", numericPrice: 250 },
+  { name: "Double Lavender bunch flower pot", price: "₹240", numericPrice: 240 },
+  { name: "Double Rose flower pot", price: "₹270", numericPrice: 270 },
+  { name: "Double Lily flower pot", price: "₹290", numericPrice: 290 },
 ];
 
 export interface FAQItem {

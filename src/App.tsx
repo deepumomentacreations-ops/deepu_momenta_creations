@@ -152,7 +152,7 @@ export default function App() {
   const [activeFaqIndex, setActiveFaqIndex] = useState<number | null>(null);
 
   // Governs active tab inside the price directory
-  const [priceListTab, setPriceListTab] = useState<'flowers' | 'pipe_keychains' | 'crochet_keychains'>('flowers');
+  const [priceListTab, setPriceListTab] = useState<'flowers' | 'pipe_keychains' | 'crochet_keychains' | 'flower_pots'>('flowers');
 
   // Governs active tab inside the instagram gallery
   const [galleryTab, setGalleryTab] = useState<'posts' | 'reels'>('posts');
