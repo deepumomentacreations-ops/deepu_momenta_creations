@@ -125,9 +125,6 @@ export const pipeCleanerFlowerPrices: PriceListItem[] = [
   { name: "Lily", price: "₹130", numericPrice: 130 },
   { name: "Hibiscus", price: "₹140", numericPrice: 140 },
   { name: "Lavender Bunch (3)", price: "₹120", numericPrice: 120 },
-  { name: "Wrapped Single Flower", price: "₹150–₹180", numericPrice: 150 },
-  { name: "Wrapped 4 Flowers", price: "₹200–₹250", numericPrice: 200 },
-  { name: "Premium Customized Bouquet", price: "₹999+", numericPrice: 999 },
 ];
 
 export const pipeCleanerKeychainPrices: PriceListItem[] = [
