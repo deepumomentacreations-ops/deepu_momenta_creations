@@ -1,0 +1,6 @@
+{
+  "name": "Deepu Momenta Creations",
+  "description": "Premium handmade and customized products including pipe-cleaner flower bouquets, gift hampers, keychains, and handbags handcrafted with care.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
