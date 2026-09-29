@@ -213,11 +213,11 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
           </p>
         </div>
 
-        {/* Tab Selection Segments (Interactive Filter Controls, styling according to Zero-Pill rules) */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8 max-w-2xl mx-auto p-1.5 bg-[#502D55]/5 rounded-xl border border-[#935073]/5">
+        {/* Tab Selection Segments (Horizontal smooth scroll on mobile, flex-wrap on tablet/laptop) */}
+        <div className="flex overflow-x-auto no-scrollbar scroll-smooth justify-start sm:justify-center gap-2 mb-8 max-w-2xl mx-auto p-1.5 bg-[#502D55]/5 rounded-2xl border border-[#935073]/5">
           <button
             onClick={() => { setActiveTab('flowers'); setSearchQuery(''); }}
-            className={`flex-1 min-w-[110px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 ${
+            className={`flex-1 min-w-[110px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 shrink-0 text-center cursor-pointer ${
               activeTab === 'flowers'
                 ? 'bg-[#502D55] text-white shadow-sm'
                 : 'text-[#502D55]/80 hover:bg-[#502D55]/5 hover:text-[#502D55]'
@@ -227,7 +227,7 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
           </button>
           <button
             onClick={() => { setActiveTab('flower_pots'); setSearchQuery(''); }}
-            className={`flex-1 min-w-[110px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 ${
+            className={`flex-1 min-w-[110px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 shrink-0 text-center cursor-pointer ${
               activeTab === 'flower_pots'
                 ? 'bg-[#502D55] text-white shadow-sm'
                 : 'text-[#502D55]/80 hover:bg-[#502D55]/5 hover:text-[#502D55]'
@@ -237,7 +237,7 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
           </button>
           <button
             onClick={() => { setActiveTab('pipe_keychains'); setSearchQuery(''); }}
-            className={`flex-1 min-w-[110px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 ${
+            className={`flex-1 min-w-[120px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 shrink-0 text-center cursor-pointer ${
               activeTab === 'pipe_keychains'
                 ? 'bg-[#502D55] text-white shadow-sm'
                 : 'text-[#502D55]/80 hover:bg-[#502D55]/5 hover:text-[#502D55]'
@@ -247,7 +247,7 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
           </button>
           <button
             onClick={() => { setActiveTab('crochet_keychains'); setSearchQuery(''); }}
-            className={`flex-1 min-w-[110px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 ${
+            className={`flex-1 min-w-[130px] px-3 py-2 text-xs font-semibold rounded-lg transition-all duration-200 shrink-0 text-center cursor-pointer ${
               activeTab === 'crochet_keychains'
                 ? 'bg-[#502D55] text-white shadow-sm'
                 : 'text-[#502D55]/80 hover:bg-[#502D55]/5 hover:text-[#502D55]'
@@ -258,7 +258,7 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
         </div>
 
         {/* Search and Sort Filter Bar */}
-        <div className="bg-white rounded-xl border border-[#935073]/10 p-4 mb-6 flex flex-col sm:flex-row gap-3 items-center justify-between shadow-sm">
+        <div className="bg-white rounded-xl border border-[#935073]/10 p-3 sm:p-4 mb-6 flex flex-col sm:flex-row gap-3 items-center justify-between shadow-sm">
           {/* Search Input */}
           <div className="relative w-full sm:max-w-xs">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#502D55]/40" size={16} />
@@ -272,9 +272,11 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
           </div>
 
           {/* Sort Dropdown */}
-          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-            <ArrowUpDown size={14} className="text-[#935073]" />
-            <span className="text-xs text-[#502D55]/60 font-medium whitespace-nowrap">Sort by:</span>
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+            <div className="flex items-center gap-1.5">
+              <ArrowUpDown size={14} className="text-[#935073]" />
+              <span className="text-xs text-[#502D55]/60 font-medium whitespace-nowrap">Sort by:</span>
+            </div>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
@@ -287,64 +289,96 @@ export default function PriceListSection({ onOrderClick, activeTab, setActiveTab
           </div>
         </div>
 
-        {/* Prices Table Area */}
+        {/* Prices Area (Mobile card list + Tablet/Desktop table) */}
         <div className="bg-white rounded-2xl border border-[#935073]/10 shadow-md overflow-hidden">
-          <div className="p-4 bg-gradient-to-r from-[#502D55]/5 to-[#935073]/5 border-b border-[#935073]/10 flex justify-between items-center">
-            <h3 className="font-serif text-lg font-bold text-[#502D55]">{getTabTitle()}</h3>
-            <span className="text-[11px] font-semibold text-[#935073] bg-[#935073]/5 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+          <div className="p-3 sm:p-4 bg-gradient-to-r from-[#502D55]/5 to-[#935073]/5 border-b border-[#935073]/10 flex justify-between items-center">
+            <h3 className="font-serif text-base sm:text-lg font-bold text-[#502D55]">{getTabTitle()}</h3>
+            <span className="text-[10px] sm:text-[11px] font-semibold text-[#935073] bg-[#935073]/10 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
               {filteredAndSortedData.length} items
             </span>
           </div>
 
           {filteredAndSortedData.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-[#935073]/10 text-[#502D55]/60 text-xs font-semibold bg-[#F8F4E9]/20">
-                    <th className="py-3 px-6">Product / Design Name</th>
-                    <th className="py-3 px-6 text-right">Standard Price</th>
-                    <th className="py-3 px-6 text-center w-40">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#502D55]/5">
-                  {filteredAndSortedData.map((item) => (
-                    <tr 
-                      key={item.name} 
-                      className="text-sm text-[#502D55] hover:bg-[#F8F4E9]/10 transition-colors"
+            <>
+              {/* Mobile Phone Card List (<640px) */}
+              <div className="block sm:hidden divide-y divide-[#502D55]/5">
+                {filteredAndSortedData.map((item) => (
+                  <div key={item.name} className="p-3.5 flex items-center justify-between gap-3 hover:bg-[#F8F4E9]/20 transition-colors">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-12 h-12 rounded-xl bg-[#F8F4E9]/50 border border-[#935073]/10 overflow-hidden relative shrink-0">
+                        <img 
+                          src={getItemImage(item.name, activeTab)} 
+                          alt={item.name} 
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-serif font-bold text-xs text-[#502D55] leading-snug truncate">{item.name}</p>
+                        <p className="text-[11px] font-mono font-extrabold text-[#935073] mt-0.5">{item.price}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => onOrderClick({ name: item.name, price: item.price })}
+                      className="shrink-0 px-3 py-1.5 text-[11px] font-bold bg-[#502D55] text-white hover:bg-[#935073] transition-colors rounded-lg shadow-xs flex items-center gap-1 cursor-pointer"
                     >
-                      <td className="py-3 px-6 font-medium flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-[#F8F4E9]/40 border border-[#935073]/10 overflow-hidden relative shadow-sm shrink-0">
-                          <img 
-                            src={getItemImage(item.name, activeTab)} 
-                            alt={item.name} 
-                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                            loading="lazy"
-                          />
-                        </div>
-                        <div>
-                          <p className="font-serif font-bold text-[#502D55] leading-tight">{item.name}</p>
-                          <p className="text-[9px] text-[#935073] font-bold tracking-wide uppercase mt-1">
-                            {activeTab === 'flowers' ? '🌸 Flower Design' : activeTab === 'pipe_keychains' ? '🔑 Pipe Cleaner' : '🧶 Crochet Craft'}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="py-4 px-6 text-right font-mono font-bold text-[#935073]">
-                        {item.price}
-                      </td>
-                      <td className="py-3 px-6 text-center">
-                        <button
-                          onClick={() => onOrderClick({ name: item.name, price: item.price })}
-                          className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold bg-[#502D55] text-white hover:bg-[#935073] transition-all rounded-lg shadow-sm whitespace-nowrap"
-                        >
-                          <ShoppingBag size={12} />
-                          Order Now
-                        </button>
-                      </td>
+                      <ShoppingBag size={11} />
+                      Order
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Tablet & Desktop Table View (>=640px) */}
+              <div className="hidden sm:block overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-[#935073]/10 text-[#502D55]/60 text-xs font-semibold bg-[#F8F4E9]/20">
+                      <th className="py-3 px-6">Product / Design Name</th>
+                      <th className="py-3 px-6 text-right">Standard Price</th>
+                      <th className="py-3 px-6 text-center w-40">Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-[#502D55]/5">
+                    {filteredAndSortedData.map((item) => (
+                      <tr 
+                        key={item.name} 
+                        className="text-sm text-[#502D55] hover:bg-[#F8F4E9]/10 transition-colors"
+                      >
+                        <td className="py-3 px-6 font-medium flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-xl bg-[#F8F4E9]/40 border border-[#935073]/10 overflow-hidden relative shadow-sm shrink-0">
+                            <img 
+                              src={getItemImage(item.name, activeTab)} 
+                              alt={item.name} 
+                              className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                              loading="lazy"
+                            />
+                          </div>
+                          <div>
+                            <p className="font-serif font-bold text-[#502D55] leading-tight">{item.name}</p>
+                            <p className="text-[9px] text-[#935073] font-bold tracking-wide uppercase mt-1">
+                              {activeTab === 'flowers' ? '🌸 Flower Design' : activeTab === 'flower_pots' ? '🪴 Flower Pot' : activeTab === 'pipe_keychains' ? '🔑 Pipe Cleaner' : '🧶 Crochet Craft'}
+                            </p>
+                          </div>
+                        </td>
+                        <td className="py-4 px-6 text-right font-mono font-bold text-[#935073]">
+                          {item.price}
+                        </td>
+                        <td className="py-3 px-6 text-center">
+                          <button
+                            onClick={() => onOrderClick({ name: item.name, price: item.price })}
+                            className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold bg-[#502D55] text-white hover:bg-[#935073] transition-all rounded-lg shadow-sm whitespace-nowrap cursor-pointer"
+                          >
+                            <ShoppingBag size={12} />
+                            Order Now
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           ) : (
             <div className="p-12 text-center text-[#502D55]/60">
               <p className="text-sm">No items match your search. Try typing a different product name!</p>

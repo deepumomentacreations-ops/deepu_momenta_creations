@@ -114,14 +114,14 @@ export default function N8nChatWidget() {
       {/* Floating Chat Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-[#502D55] to-[#935073] text-[#F8F4E9] shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#935073] focus:ring-offset-2 focus:ring-offset-[#F8F4E9]"
+        className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-40 flex h-13 w-13 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-gradient-to-tr from-[#502D55] to-[#935073] text-[#F8F4E9] shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#935073] focus:ring-offset-2 focus:ring-offset-[#F8F4E9] cursor-pointer"
         aria-label="Open n8n chatbot"
       >
         {isOpen ? (
-          <X size={24} className="transition-transform duration-300 rotate-90" />
+          <X size={22} className="transition-transform duration-300 rotate-90" />
         ) : (
           <div className="relative">
-            <Bot size={26} className="transition-transform duration-300" />
+            <Bot size={24} className="transition-transform duration-300" />
             <span className="absolute -top-1 -right-1 flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-400"></span>
@@ -130,9 +130,9 @@ export default function N8nChatWidget() {
         )}
       </button>
 
-      {/* Interactive Chat Window */}
+      {/* Interactive Chat Window (Full responsiveness across Phone, Tablet & Desktop) */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-40 w-[360px] md:w-[400px] h-[560px] flex flex-col rounded-3xl bg-[#F8F4E9] border border-[#935073]/20 shadow-2xl overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-bottom-8">
+        <div className="fixed bottom-20 right-3 left-3 sm:left-auto sm:right-6 sm:bottom-24 z-40 w-auto sm:w-[380px] md:w-[410px] h-[min(560px,calc(100dvh-110px))] flex flex-col rounded-3xl bg-[#F8F4E9] border border-[#935073]/20 shadow-2xl overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-bottom-8">
           
           {/* Header */}
           <div className="bg-gradient-to-r from-[#502D55] to-[#935073] p-4 text-[#F8F4E9] flex items-center justify-between shadow-md">
