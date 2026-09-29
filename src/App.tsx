@@ -29,6 +29,7 @@ import {
 
 import InstagramModal from './components/InstagramModal';
 import PriceListSection from './components/PriceListSection';
+import N8nChatWidget from './components/N8nChatWidget';
 
 export default function App() {
   // Mobile Navigation Menu Toggle
@@ -1747,6 +1748,9 @@ Please confirm my order details! Thank you.`;
       >
         <MessageCircle size={28} />
       </a>
+
+      {/* ----------------- n8n CHATBOT FLOATING WIDGET (Bottom Right Corner) ----------------- */}
+      <N8nChatWidget />
 
 
       {/* ----------------- INTERACTIVE PAYMENT & SCREENSHOT UPLOAD MODAL ----------------- */}
