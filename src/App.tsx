@@ -29,7 +29,6 @@ import {
 
 import InstagramModal from './components/InstagramModal';
 import PriceListSection from './components/PriceListSection';
-import AIAssistant from './components/AIAssistant';
 
 export default function App() {
   // Mobile Navigation Menu Toggle
@@ -646,7 +645,7 @@ Thank you! I am pasting this order receipt and sending the payment screenshot ri
             {productCategories
               .filter(cat => {
                 if (activeCategoryFilter === 'all') return true;
-                if (activeCategoryFilter === 'flowers') return cat.id.includes('flowers') || cat.id.includes('bouquets');
+                if (activeCategoryFilter === 'flowers') return cat.id.includes('flowers') || cat.id.includes('bouquets') || cat.id.includes('pots');
                 if (activeCategoryFilter === 'keychains') return cat.id.includes('keychains') || cat.id.includes('hampers');
                 if (activeCategoryFilter === 'bags') return cat.id.includes('bags') || cat.id.includes('bangles') || cat.id.includes('earrings') || cat.id.includes('embroidery');
                 return true;
@@ -667,6 +666,9 @@ Thank you! I am pasting this order receipt and sending the payment screenshot ri
                         document.getElementById('price-list')?.scrollIntoView({ behavior: 'smooth' });
                       } else if (cat.id === "crochet-keychains") {
                         setPriceListTab('crochet_keychains');
+                        document.getElementById('price-list')?.scrollIntoView({ behavior: 'smooth' });
+                      } else if (cat.id === "flower-pots") {
+                        setPriceListTab('flower_pots');
                         document.getElementById('price-list')?.scrollIntoView({ behavior: 'smooth' });
                       }
                     }}
@@ -698,6 +700,9 @@ Thank you! I am pasting this order receipt and sending the payment screenshot ri
                             } else if (cat.id === "crochet-keychains") {
                               setPriceListTab('crochet_keychains');
                               document.getElementById('price-list')?.scrollIntoView({ behavior: 'smooth' });
+                            } else if (cat.id === "flower-pots") {
+                              setPriceListTab('flower_pots');
+                              document.getElementById('price-list')?.scrollIntoView({ behavior: 'smooth' });
                             }
                           }}
                           className="font-serif text-lg font-bold text-[#502D55] group-hover:text-[#935073] transition-colors cursor-pointer"
@@ -728,6 +733,17 @@ Thank you! I am pasting this order receipt and sending the payment screenshot ri
                           <Sparkles size={14} className="text-[#F6DBC0]" />
                           Customize Bouquet / Select Flowers
                         </button>
+                      ) : cat.id === "flower-pots" ? (
+                        <button
+                          onClick={() => {
+                            setPriceListTab('flower_pots');
+                            document.getElementById('price-list')?.scrollIntoView({ behavior: 'smooth' });
+                          }}
+                          className="w-full py-2.5 text-xs font-bold text-center bg-gradient-to-r from-[#502D55] to-[#935073] text-white hover:opacity-95 rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+                        >
+                          <Sparkles size={14} className="text-[#F6DBC0]" />
+                          Explore Flower Pots Price List
+                        </button>
                       ) : (
                         <>
                           <a
@@ -737,6 +753,8 @@ Thank you! I am pasting this order receipt and sending the payment screenshot ri
                                 setPriceListTab('pipe_keychains');
                               } else if (cat.id === 'crochet-keychains') {
                                 setPriceListTab('crochet_keychains');
+                              } else if (cat.id === 'flower-pots') {
+                                setPriceListTab('flower_pots');
                               }
                             }}
                             className="flex-1 py-2 text-xs font-bold text-center border border-[#935073]/15 text-[#502D55] rounded-xl hover:bg-[#F8F4E9]/50 transition-colors"
@@ -1731,10 +1749,6 @@ Please confirm my order details! Thank you.`;
       </a>
 
 
-      {/* ----------------- 11. AI SHOPPING ASSISTANT (Bottom Right Corner Floating Component) ----------------- */}
-      <AIAssistant />
-
-
       {/* ----------------- INTERACTIVE PAYMENT & SCREENSHOT UPLOAD MODAL ----------------- */}
       {isPaymentModalOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
@@ -1773,90 +1787,130 @@ Please confirm my order details! Thank you.`;
               </div>
             </div>
 
-            {/* Payment Mode Selector Tabs */}
-            <div className="flex gap-2 p-1 bg-[#502D55]/5 rounded-xl border border-[#935073]/5 mb-4">
-              <button
-                onClick={() => setPaymentMethod('PhonePe')}
-                className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-colors ${
-                  paymentMethod === 'PhonePe'
-                    ? 'bg-white text-[#502D55] shadow-sm'
-                    : 'text-[#502D55]/60 hover:text-[#502D55]'
-                }`}
-              >
-                📱 Pay via PhonePe
-              </button>
-              <button
-                onClick={() => setPaymentMethod('Paytm')}
-                className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-colors ${
-                  paymentMethod === 'Paytm'
-                    ? 'bg-white text-[#502D55] shadow-sm'
-                    : 'text-[#502D55]/60 hover:text-[#502D55]'
-                }`}
-              >
-                👛 Pay via Paytm
-              </button>
-            </div>
+            {/* Dynamic Payable Amount & QR Generation */}
+            {(() => {
+              const payableAmount = (() => {
+                if (formBudget && !isNaN(Number(formBudget)) && Number(formBudget) > 0) {
+                  return Number(formBudget);
+                }
+                const cleanStr = (formProduct || '').replace(/₹|,/g, '');
+                const match = cleanStr.match(/\d+/);
+                const parsedPrice = match ? parseInt(match[0], 10) : 0;
+                if (parsedPrice > 0) {
+                  return parsedPrice * (Number(formQuantity) || 1);
+                }
+                if (cartTotalAmount > 0) {
+                  return cartTotalAmount;
+                }
+                return 150;
+              })();
 
-            {/* Selected QR Card */}
-            <div className="bg-white rounded-2xl border border-[#935073]/10 p-5 text-center flex flex-col items-center mb-6 shadow-xs">
-              {paymentMethod === 'Paytm' ? (
-                /* Paytm Verified Greeshma Card Layout */
-                <div className="w-full flex flex-col items-center">
-                  <div className="flex items-center gap-1 mb-2.5 bg-[#F8F4E9]/50 px-2 py-1 rounded-lg w-full justify-center">
-                    <span className="font-sans text-[11px] font-extrabold text-[#502D55] truncate">Allumalla Greeshma</span>
-                    {/* Verified Blue Badge */}
-                    <svg className="w-3.5 h-3.5 text-[#1C9BEF] shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" stroke="currentColor" strokeWidth="2"/>
-                    </svg>
-                  </div>
-                  <div className="w-40 h-40 bg-white rounded-xl p-1.5 border border-[#935073]/10 flex items-center justify-center shadow-xs">
-                    <img 
-                      src="/images/paytm.png" 
-                      alt="Paytm payment QR"
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                  <p className="text-[9px] font-mono font-bold text-gray-400 mt-2.5">Paytm UPI Terminal</p>
-                </div>
-              ) : (
-                /* PhonePe Bank Card Layout */
-                <div className="w-full flex flex-col items-center">
-                  <div className="flex items-center gap-1 mb-2.5 bg-purple-50 px-2.5 py-1 rounded-lg w-full justify-center">
-                    <span className="font-sans text-[11px] font-extrabold text-purple-700">PhonePe UPI</span>
-                    <span className="text-xs">📱</span>
-                  </div>
-                  <div className="w-40 h-40 bg-white rounded-xl p-1.5 border border-purple-100 flex items-center justify-center shadow-xs relative">
-                    <img 
-                      src="/images/phone_pay.png" 
-                      alt="PhonePe payment QR"
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                  <div className="mt-2.5 flex items-center gap-1 bg-[#F8F4E9]/60 px-2 py-1 rounded border border-[#935073]/5 w-full justify-center">
-                    <span className="text-[9px] font-semibold text-[#502D55]/75">IOB Bank - 0345</span>
-                  </div>
-                </div>
-              )}
+              const upiId = paymentMethod === 'PhonePe' ? '9703265096@ybl' : '9703265096@ptyes';
+              const upiName = 'Allumalla Greeshma';
+              const orderNote = `Deepu Momenta - ${formProduct || 'Custom Order'}`.substring(0, 40);
+              const upiIntentUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(upiName)}&am=${payableAmount}&cu=INR&tn=${encodeURIComponent(orderNote)}`;
+              const dynamicQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiIntentUrl)}&margin=10`;
 
-              <div className="mt-4 w-full">
-                <p className="text-[10px] font-semibold text-[#502D55]/50 uppercase tracking-wider">
-                  {paymentMethod === 'PhonePe' ? 'UPI Phone Number' : 'Paytm UPI ID'}
-                </p>
-                <p className="text-sm font-mono font-bold text-[#502D55] mt-0.5">
-                  {paymentMethod === 'PhonePe' ? '9703265096' : '9703265096@ptyes'}
-                </p>
-                <button
-                  onClick={() => {
-                    const textToCopy = paymentMethod === 'PhonePe' ? '9703265096' : '9703265096@ptyes';
-                    navigator.clipboard.writeText(textToCopy);
-                    alert(`Copied ${paymentMethod} details to clipboard! 💕`);
-                  }}
-                  className="mt-1.5 text-xs font-bold text-[#935073] hover:text-[#502D55] transition-colors inline-flex items-center gap-1"
-                >
-                  Copy Details
-                </button>
-              </div>
-            </div>
+              return (
+                <>
+                  {/* Payment Mode Selector Tabs */}
+                  <div className="flex gap-2 p-1 bg-[#502D55]/5 rounded-xl border border-[#935073]/5 mb-4">
+                    <button
+                      onClick={() => setPaymentMethod('PhonePe')}
+                      className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-colors ${
+                        paymentMethod === 'PhonePe'
+                          ? 'bg-white text-[#502D55] shadow-sm'
+                          : 'text-[#502D55]/60 hover:text-[#502D55]'
+                      }`}
+                    >
+                      📱 Pay via PhonePe
+                    </button>
+                    <button
+                      onClick={() => setPaymentMethod('Paytm')}
+                      className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-colors ${
+                        paymentMethod === 'Paytm'
+                          ? 'bg-white text-[#502D55] shadow-sm'
+                          : 'text-[#502D55]/60 hover:text-[#502D55]'
+                      }`}
+                    >
+                      👛 Pay via Paytm
+                    </button>
+                  </div>
+
+                  {/* Selected QR Card */}
+                  <div className="bg-white rounded-2xl border border-[#935073]/10 p-5 text-center flex flex-col items-center mb-6 shadow-xs">
+                    {paymentMethod === 'Paytm' ? (
+                      /* Paytm Verified Greeshma Card Layout with Live Amount Embedded */
+                      <div className="w-full flex flex-col items-center">
+                        <div className="flex items-center gap-1 mb-2.5 bg-[#F8F4E9]/50 px-2 py-1 rounded-lg w-full justify-center">
+                          <span className="font-sans text-[11px] font-extrabold text-[#502D55] truncate">Allumalla Greeshma</span>
+                          {/* Verified Blue Badge */}
+                          <svg className="w-3.5 h-3.5 text-[#1C9BEF] shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" stroke="currentColor" strokeWidth="2"/>
+                          </svg>
+                        </div>
+                        <div className="w-44 h-44 bg-white rounded-xl p-2 border border-[#935073]/15 flex items-center justify-center shadow-xs relative">
+                          <img 
+                            src={dynamicQrUrl} 
+                            alt={`Paytm payment QR for ₹${payableAmount}`}
+                            className="w-full h-full object-contain"
+                          />
+                          <span className="absolute bottom-1 right-1 bg-[#502D55] text-[#F8F4E9] font-mono font-bold text-[9px] px-1.5 py-0.5 rounded shadow-xs">
+                            ₹{payableAmount}
+                          </span>
+                        </div>
+                        <p className="text-[10px] font-bold text-[#502D55] mt-2">
+                          Total to Pay: <span className="font-mono text-[#935073] font-extrabold">₹{payableAmount}</span>
+                        </p>
+                        <p className="text-[9px] font-mono font-bold text-gray-400 mt-1">Paytm UPI Terminal (Auto-fills ₹{payableAmount})</p>
+                      </div>
+                    ) : (
+                      /* PhonePe Bank Card Layout with Live Amount Embedded */
+                      <div className="w-full flex flex-col items-center">
+                        <div className="flex items-center gap-1 mb-2.5 bg-purple-50 px-2.5 py-1 rounded-lg w-full justify-center">
+                          <span className="font-sans text-[11px] font-extrabold text-purple-700">PhonePe UPI</span>
+                          <span className="text-xs">📱</span>
+                        </div>
+                        <div className="w-44 h-44 bg-white rounded-xl p-2 border border-purple-100 flex items-center justify-center shadow-xs relative">
+                          <img 
+                            src={dynamicQrUrl} 
+                            alt={`PhonePe payment QR for ₹${payableAmount}`}
+                            className="w-full h-full object-contain"
+                          />
+                          <span className="absolute bottom-1 right-1 bg-[#502D55] text-[#F8F4E9] font-mono font-bold text-[9px] px-1.5 py-0.5 rounded shadow-xs">
+                            ₹{payableAmount}
+                          </span>
+                        </div>
+                        <p className="text-[10px] font-bold text-[#502D55] mt-2">
+                          Total to Pay: <span className="font-mono text-[#935073] font-extrabold">₹{payableAmount}</span>
+                        </p>
+                        <div className="mt-1.5 flex items-center gap-1 bg-[#F8F4E9]/60 px-2 py-1 rounded border border-[#935073]/5 w-full justify-center">
+                          <span className="text-[9px] font-semibold text-[#502D55]/75">IOB Bank - 0345 (Auto-fills ₹{payableAmount})</span>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="mt-4 w-full">
+                      <p className="text-[10px] font-semibold text-[#502D55]/50 uppercase tracking-wider">
+                        {paymentMethod === 'PhonePe' ? 'UPI Phone Number' : 'Paytm UPI ID'}
+                      </p>
+                      <p className="text-sm font-mono font-bold text-[#502D55] mt-0.5">
+                        {upiId}
+                      </p>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(upiId);
+                          alert(`Copied ${paymentMethod} details to clipboard! 💕`);
+                        }}
+                        className="mt-1.5 text-xs font-bold text-[#935073] hover:text-[#502D55] transition-colors inline-flex items-center gap-1 cursor-pointer"
+                      >
+                        Copy Details
+                      </button>
+                    </div>
+                  </div>
+                </>
+              );
+            })()}
 
             {/* Screenshot Upload Block */}
             <div className="mb-6">

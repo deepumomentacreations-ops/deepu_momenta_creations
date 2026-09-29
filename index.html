@@ -13,9 +13,59 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    
+    <!-- n8n Chatbot Widget Stylesheet & Custom Brand Styling -->
+    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+    <style>
+      :root {
+        --chat--color-primary: #502D55;
+        --chat--color-primary-shade-50: #3d2141;
+        --chat--color-primary-tint-50: #935073;
+        --chat--color-secondary: #935073;
+        --chat--color-light: #F8F4E9;
+        --chat--color-dark: #3D2141;
+        --chat--toggle--background: #502D55;
+        --chat--toggle--hover--background: #935073;
+        --chat--toggle--color: #F8F4E9;
+        --chat--header--background: linear-gradient(135deg, #502D55, #935073);
+        --chat--header--color: #F8F4E9;
+        --chat--message--bot--background: #FFFFFF;
+        --chat--message--bot--color: #502D55;
+        --chat--message--user--background: #935073;
+        --chat--message--user--color: #FFFFFF;
+        --chat--border-radius: 1rem;
+        --chat--window--border-radius: 1.25rem;
+      }
+    </style>
   </head>
   <body class="bg-[#F8F4E9] text-[#502D55] font-sans antialiased">
     <div id="root"></div>
+    <div id="n8n-chat"></div>
+
+    <!-- Initialize n8n Chatbot directly connecting to your n8n cloud webhook -->
+    <script type="module">
+      import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+      createChat({
+        webhookUrl: 'https://deepumomentacretions.app.n8n.cloud/webhook/389f5bf8-b418-48fc-ae87-750b15983946/chat',
+        mode: 'window',
+        showWelcomeScreen: false,
+        defaultLanguage: 'en',
+        initialMessages: [
+          'Hello! 🌸 Welcome to Deepu Momenta Creations.',
+          'I am your automated assistant. How can I help you with our handcrafted flowers, flower pots, custom bouquets, keychains, or hampers today?'
+        ],
+        i18n: {
+          en: {
+            title: 'Deepu Momenta Creations',
+            subtitle: 'AI Shopping Assistant',
+            footer: '',
+            getStarted: 'Start Conversation',
+            inputPlaceholder: 'Type your message...',
+          },
+        },
+      });
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
